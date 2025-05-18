@@ -1,0 +1,37 @@
+{
+    "id": "/",
+    "scope": "/",
+    "start_url": "/?source=pwa",
+    "name": "Distory - Share Your Stories",
+    "short_name": "Distory",
+    "description": "An application to share your personal stories and experiences",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#3498db",
+    "icons": [
+        {
+            "src": "/icons/72x72.ico",
+            "sizes": "72x72",
+            "type": "image/x-icon",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/96x96.ico",
+            "sizes": "96x96",
+            "type": "image/x-icon",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/128x128.ico",
+            "sizes": "128x128",
+            "type": "image/x-icon",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/256x256.ico",
+            "sizes": "256x256",
+            "type": "image/x-icon",
+            "purpose": "any"
+        }
+    ]
+}
