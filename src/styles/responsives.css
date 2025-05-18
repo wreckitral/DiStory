@@ -1,0 +1,289 @@
+:root {
+    --view-transition-duration: 0.5s;
+    --transition-timing: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-scale: 0.98;
+    --transition-slide: 40px;
+}
+
+@keyframes enhanced-fade-in {
+    from {
+        opacity: 0;
+        transform: scale(var(--transition-scale));
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes enhanced-fade-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(var(--transition-scale));
+    }
+}
+
+@keyframes slide-from-right {
+    from {
+        opacity: 0;
+        transform: translateX(var(--transition-slide));
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-to-left {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(calc(var(--transition-slide) * -1));
+    }
+}
+
+@keyframes zoom-fade-in {
+    from {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoom-fade-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+::view-transition-group(*) {
+    animation-timing-function: var(--transition-timing);
+}
+
+::view-transition-image-pair(*) {
+    isolation: auto;
+}
+
+::view-transition {
+    animation-duration: var(--view-transition-duration);
+}
+
+html {
+    view-transition-name: root;
+}
+
+::view-transition-old(root) {
+    animation: var(--view-transition-duration) var(--transition-timing) both enhanced-fade-out;
+}
+
+::view-transition-new(root) {
+    animation: var(--view-transition-duration) var(--transition-timing) both enhanced-fade-in;
+}
+
+main {
+    view-transition-name: page;
+    contain: paint;
+}
+
+::view-transition-old(page) {
+    animation: var(--view-transition-duration) var(--transition-timing) both slide-to-left;
+}
+
+::view-transition-new(page) {
+    animation: var(--view-transition-duration) var(--transition-timing) both slide-from-right;
+}
+
+[data-page='home'] {
+    view-transition-name: home-page;
+}
+
+::view-transition-old(home-page),
+::view-transition-new(home-page),
+::view-transition-old(stories),
+::view-transition-new(stories),
+::view-transition-old(auth-page),
+::view-transition-new(auth-page) {
+    animation: var(--view-transition-duration) var(--transition-timing) both enhanced-fade-in;
+}
+
+[data-page='story-detail'] {
+    view-transition-name: story-detail;
+}
+
+::view-transition-old(story-detail) {
+    animation: var(--view-transition-duration) var(--transition-timing) both zoom-fade-out;
+}
+
+::view-transition-new(story-detail) {
+    animation: var(--view-transition-duration) var(--transition-timing) both zoom-fade-in;
+}
+
+[data-page='create-story'],
+[data-page='signup'],
+[data-page='signin'] {
+    view-transition-name: auth-page;
+}
+
+#stories-container {
+    view-transition-name: stories;
+    contain: layout style paint;
+}
+
+.side-nav {
+    transition:
+        transform 0.4s var(--transition-timing),
+        box-shadow 0.4s var(--transition-timing);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.story-card {
+    transition:
+        transform 0.4s var(--transition-timing),
+        box-shadow 0.4s var(--transition-timing),
+        opacity 0.3s var(--transition-timing);
+    backface-visibility: hidden;
+    will-change: transform, box-shadow;
+}
+.story-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    transition: all 0.3s var(--transition-timing);
+    will-change: transform, background-color;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(93, 74, 255, 0.3);
+}
+
+.form-input {
+    transition: all 0.3s var(--transition-timing);
+}
+
+.form-input:focus {
+    transform: scale(1.01);
+    transition:
+        border-color 0.3s var(--transition-timing),
+        box-shadow 0.3s var(--transition-timing),
+        transform 0.3s var(--transition-timing);
+    box-shadow: 0 0 0 3px rgba(93, 74, 255, 0.2);
+}
+
+.debug-transitions * {
+    outline: 1px solid rgba(255, 0, 0, 0.1) !important;
+}
+
+.transition-flash::view-transition-new(*) {
+    animation-delay: 0s;
+    animation: flash 0.1s ease-out;
+}
+
+@keyframes flash {
+    0% {
+        background-color: rgba(93, 74, 255, 0.1);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+@media (max-width: 480px) {
+    #stories-container {
+        grid-template-columns: 1fr;
+    }
+
+    .story-thumbnail {
+        height: 200px;
+    }
+
+    .favorites-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .story-thumbnail {
+        height: 160px;
+    }
+
+    .story-card-content {
+        padding: 1.25rem;
+    }
+
+    .story-card-footer {
+        padding: 0.8rem 1.25rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #main-content {
+        margin-left: 0;
+    }
+
+    .side-nav {
+        display: none;
+    }
+
+    .site-footer {
+        margin-left: 0;
+    }
+
+    #menu-toggle {
+        display: block;
+    }
+
+    #stories-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    .story-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .favorites-header h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    main {
+        transition: margin-left 0.4s var(--transition-timing);
+        will-change: margin-left;
+    }
+}
+
+@media (prefers-reduced-motion) {
+    :root {
+        --view-transition-duration: 0.1s;
+        --transition-slide: 5px;
+        --transition-scale: 0.995;
+    }
+    * {
+        transition-duration: 0.1s !important;
+    }
+}
